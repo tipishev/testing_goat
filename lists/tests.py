@@ -19,6 +19,7 @@ class HomePageTest(TestCase):
         expected_html = render_to_string('home.html')
         self.assertEqual(response.content.decode(), expected_html)
 
+
 class ListAndItemModelList(TestCase):
 
     def test_saving_and_retrieving_items(self):
@@ -48,6 +49,7 @@ class ListAndItemModelList(TestCase):
         self.assertEqual(second_saved_item.text, 'Item the second')
         self.assertEqual(second_saved_item.list, list_)
 
+
 class ListViewTest(TestCase):
 
     def test_uses_list_template(self):
@@ -72,14 +74,15 @@ class ListViewTest(TestCase):
         self.assertNotContains(response, 'other item 2')
 
     def test_passes_correct_list_to_template(self):
-        other_list = List.objects.create()
+        List.objects.create()
         correct_list = List.objects.create()
         response = self.client.get('/lists/%d/' % (correct_list.id,))
         self.assertEqual(response.context['list'], correct_list)
 
+
 class NewListTest(TestCase):
     def test_saving_a_POST_request(self):
-        response = self.client.post(
+        self.client.post(
             '/lists/new',
             data={'item_text': 'A new list item'}
         )
@@ -96,12 +99,13 @@ class NewListTest(TestCase):
         new_list = List.objects.first()
         self.assertRedirects(response, '/lists/%d/' % (new_list.id,))
 
+
 class NewItemTest(TestCase):
     def test_can_save_a_POST_request_to_an_existing_list(self):
-        other_list = List.objects.create()
+        List.objects.create()
         correct_list = List.objects.create()
 
-        response = self.client.post(
+        self.client.post(
             '/lists/%d/add_item' % (correct_list.id,),
             data={'item_text': 'A new item for an existing list'}
         )
@@ -112,7 +116,7 @@ class NewItemTest(TestCase):
         self.assertEqual(new_item.list, correct_list)
 
     def test_redirects_to_list_view(self):
-        other_list = List.objects.create()
+        List.objects.create()
         correct_list = List.objects.create()
 
         response = self.client.post(
