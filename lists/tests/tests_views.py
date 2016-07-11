@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
+from django.core.exceptions import ValidationError
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.html import escape
@@ -108,4 +109,11 @@ class NewItemTest(TestCase):
         self.client.post('/lists/new', data={'item_text': ''})
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
+
+    # def test_doesnt_save_empty_items_to_existing_list(self):
+    #     list_ = List.objects.create()
+    #     Item.objects.create(text='item 1', list=list_)
+    #     with self.assertRaises(ValidationError):
+    #         self.client.post(
+    #             '/lists/%d/add_item' % (list_.id,), data={'item_text': ''})
 
