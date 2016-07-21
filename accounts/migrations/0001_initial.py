@@ -13,7 +13,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='User',
             fields=[
-                ('email', models.EmailField(serialize=False, max_length=254, primary_key=True)),
+                ('email', models.EmailField(max_length=254, primary_key=True, serialize=False)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Token',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('email', models.EmailField(max_length=254)),
+                ('uid', models.CharField(max_length=40)),
             ],
         ),
     ]
